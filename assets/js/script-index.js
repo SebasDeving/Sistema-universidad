@@ -7,8 +7,7 @@ function changeTab(tab) {
     document.querySelector(`.tab[onclick="changeTab('${tab}')"]`).classList.add('active');
     document.getElementById(`${tab}-form`).classList.add('active');
 
-    // Ocultar todos los mensajes de error
-    document.querySelectorAll('.error-message').forEach(e => e.style.display = 'none');
+
 }
 
 

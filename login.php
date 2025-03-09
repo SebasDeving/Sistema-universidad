@@ -33,17 +33,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verificar la contraseña cifrada
         if (password_verify($password, $stored_password)) {
             $_SESSION["admin"] = $cedula;
-            header("Location: panel-admin.html"); // Redirigir al panel de administración
+            $_SESSION["success_message"] = "Inicio de sesión exitoso";
+            echo "<script>setTimeout(function(){ window.location.href = 'panel-admin.html'; }, 2000);</script>";
             exit();
         } else {
-            echo "<script>alert('Contraseña incorrecta'); window.location.href='Index.html';</script>";
+            $_SESSION["error_message"] = "Contraseña incorrecta";
+            echo "<script>setTimeout(function(){ window.location.href = 'index.php'; }, 2000);</script>";
+            exit();
         }
     } else {
-        echo "<script>alert('Cédula no registrada'); window.location.href='Index.html';</script>";
+        $_SESSION["error_message"] = "Cédula no registrada";
+        echo "<script>setTimeout(function(){ window.location.href = 'index.php'; }, 2000);</script>";
+        exit();
     }
-
-    $stmt->close();
 }
+
+$stmt->close();
+$update_stmt->close();
 
 $conn->close();
 ?>

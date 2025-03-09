@@ -8,7 +8,7 @@ function showSection(sectionId) {
 }
 
 function logout() {
-    window.location.href = 'index.html'; // Redirigir al login
+    window.location.href = 'index.php'; // Redirigir al login
 }
 
 

@@ -10,23 +10,23 @@ function getParameterByName(name, url = window.location.href) {
 
 // Cargar datos del estudiante (simulado)
 window.onload = function() {
-    const studentId = getParameterByName('id');
+    const studentId = getParameterByid('id');
     if (!studentId) {
-        window.location.href = 'index.html';
+        window.location.href = 'Estudiantes.html';
         return;
     }
     
-    document.getElementById('student-id').textContent = studentId;
+    document.getElementById('cedula_estudiante').textContent = studentId;
     
     // Aquí normalmente cargarías datos de la base de datos
     // Por ahora simulamos un nombre basado en el ID
     const studentName = `Estudiante ${studentId}`;
-    document.getElementById('student-name').textContent = studentName;
+    document.getElementById('nombre').textContent = studentName;
     
     // También cargarías los resultados reales del estudiante
     // Los datos mostrados son solo ejemplos estáticos
 }
 
 function logout() {
-    window.location.href = 'index.html';
+    window.location.href = 'index.php';
 }
