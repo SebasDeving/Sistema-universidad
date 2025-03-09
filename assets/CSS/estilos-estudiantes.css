@@ -1,0 +1,137 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.user-info {
+    font-size: 18px;
+}
+
+.user-id {
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+button.logout {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.result-section {
+    margin-bottom: 30px;
+}
+
+.result-section h2 {
+    color: #555;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.result-card {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.score {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.score-details {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.score-item {
+    text-align: center;
+}
+
+.score-label {
+    font-size: 14px;
+    color: #777;
+}
+
+.score-value {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+.graphic {
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.graphic-fill {
+    height: 100%;
+    background-color: #4CAF50;
+}
+
+.average-comparison {
+    display: flex;
+    margin: 20px 0;
+}
+
+.comparison-item {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+}
+
+.comparison-label {
+    font-size: 14px;
+    color: #777;
+}
+
+.comparison-value {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.your-score {
+    color: #4CAF50;
+}
+
+.avg-score {
+    color: #2196F3;
+}
