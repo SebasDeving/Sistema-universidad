@@ -8,8 +8,6 @@ function showSection(sectionId) {
 }
 
 function logout() {
-    // Aquí puedes agregar la lógica para cerrar sesión
-    alert('Cerrando sesión...');
     window.location.href = 'index.html'; // Redirigir al login
 }
 
