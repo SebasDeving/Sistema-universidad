@@ -34,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $stored_password)) {
             $_SESSION["admin"] = $cedula;
             $_SESSION["success_message"] = "Inicio de sesión exitoso";
-            
             echo "<script>setTimeout(function(){ window.location.href = 'panel-admin.html'; }, 2000);</script>";
             exit();
         } else {

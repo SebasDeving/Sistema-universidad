@@ -22,10 +22,20 @@
             <form id="estudiante-login" action="consulta-estudiantes.php" method="POST">
                 <div class="form-group">
                     <label for="cedula_estudiantes">Cédula Estudiante:</label>
-                    <input type="text" id="cedula_estudiantes" name="cedula_estudiantes" required pattern="[0-9]{7,10}">
+                    <input type="text" id="cedula_estudiantes" name="cedula_estudiante" required pattern="[0-9]{7,10}">
                 </div>
                 <button type="submit">Ver Resultados</button>
-                <div class="error-message" id="estudiante-error" style="display:none; color: red;">Cédula no válida</div>
+                <?php
+                session_start();
+                if (isset($_SESSION["error_message"])) {
+                    echo "<div class='message message_error'>" . $_SESSION["error_message"] . "</div>";
+                    unset($_SESSION["error_message"]); // Eliminar el mensaje de error después de mostrarlo
+                }
+                if (isset($_SESSION["error_message"])) {
+                    echo "<div class='message message_error'>" . $_SESSION["error_message"] . "</div>";
+                    unset($_SESSION["error_message"]); // Eliminar el mensaje de error después de mostrarlo
+                }
+                ?>
             </form>
         </div>
         
@@ -43,7 +53,6 @@
                 </div>
                 <button type="submit">Iniciar Sesión</button>
                 <?php
-                session_start();
                 if (isset($_SESSION["error_message"])) {
                     echo "<div class='message message_error'>" . $_SESSION["error_message"] . "</div>";
                     unset($_SESSION["error_message"]); // Eliminar el mensaje de error después de mostrarlo
