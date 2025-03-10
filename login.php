@@ -1,8 +1,8 @@
 <?php
 session_start();
-include 'db.php';
+include 'connection.php';
 
-$conn = getConnection(); // Asegurar la conexión a la base de datos
+$conn = Connection::getConnection(); // Asegurar la conexión a la base de datos
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cedula = $_POST["cedula_admin"];
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("i", $cedula);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
         $id = $row["id"];
