@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Prueba</title>
+    <link rel="stylesheet" href="assets/CSS/estilos-estudiantes.css">
+    <script async src="assets/js/script-estudiante.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="user-info">
+                Estudiante: <span
+                    id="nombre"><?php echo isset($_GET['nombre']) && isset($_GET['apellido']) ? htmlspecialchars($_GET['nombre']) . ' ' . htmlspecialchars($_GET['apellido']) : 'N/A'; ?></span>
+                <div>ID: <span class="user-id"
+                        id="id"><?php echo isset($_GET['cedula']) ? htmlspecialchars($_GET['cedula']) : 'N/A'; ?></span>
+                </div>
+            </div>
+            <button class="logout" onclick="logout()">Cerrar Sesión</button>
+        </header>
+
+        <h1>Resultados de tus Pruebas</h1>
+
+        <div class="result-section">
+            <h2>Resultados Generales</h2>
+            <div class="result-card">
+                <div class="score">78.5/100</div>
+                <div class="score-details">
+                    <div class="score-item">
+                        <div class="score-label">Matemáticas</div>
+                        <div class="score-value">85/100</div>
+                        <div class="graphic">
+                            <div class="graphic-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Lenguaje</div>
+                        <div class="score-value">72/100</div>
+                        <div class="graphic">
+                            <div class="graphic-fill" style="width: 72%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="average-comparison">
+                    <div class="comparison-item">
+                        <div class="comparison-label">Tu Puntaje</div>
+                        <div class="comparison-value your-score">78.5</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-label">Promedio de Carrera</div>
+                        <div class="comparison-value avg-score">72.3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-section">
+            <h2>Detalle por Áreas</h2>
+            <div class="result-card">
+                <div class="score-details">
+                    <div class="score-item">
+                        <div class="score-label">Razonamiento Lógico</div>
+                        <div class="score-value">82/100</div>
+                        <div class="graphic">
+                            <div class="graphic-fill" style="width: 82%"></div>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Comprensión Lectora</div>
+                        <div class="score-value">75/100</div>
+                        <div class="graphic">
+                            <div class="graphic-fill" style="width: 75%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="score-details">
+                    <div class="score-item">
+                        <div class="score-label">Análisis de Datos</div>
+                        <div class="score-value">88/100</div>
+                        <div class="graphic">
+                            <div class="graphic-fill" style="width: 88%"></div>
+                        </div>
+                    </div>
+                    <div class="score-item">
+                        <div class="score-label">Conocimientos Generales</div>
+                        <div class="score-value">69/100</div>
+                        <div class="graphic">
+                            <div class="graphic-fill" style="width: 69%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
