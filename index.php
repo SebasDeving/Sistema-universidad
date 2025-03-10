@@ -27,13 +27,13 @@
                 <button type="submit">Ver Resultados</button>
                 <?php
                 session_start();
-                if (isset($_SESSION["error_message"])) {
-                    echo "<div class='message message_error'>" . $_SESSION["error_message"] . "</div>";
-                    unset($_SESSION["error_message"]); // Eliminar el mensaje de error después de mostrarlo
+                if (isset($_SESSION["errorcedula_message"])) {
+                    echo "<div class='message message_error'>" . $_SESSION["errorcedula_message"] . "</div>";
+                    unset($_SESSION["errorcedula_message"]); // Eliminar el mensaje de error después de mostrarlo
                 }
-                if (isset($_SESSION["error_message"])) {
-                    echo "<div class='message message_error'>" . $_SESSION["error_message"] . "</div>";
-                    unset($_SESSION["error_message"]); // Eliminar el mensaje de error después de mostrarlo
+                if (isset($_SESSION["errorcedula_message"])) {
+                    echo "<div class='message message_error'>" . $_SESSION["errorcedula_message"] . "</div>";
+                    unset($_SESSION["errorcedula_message"]); // Eliminar el mensaje de error después de mostrarlo
                 }
                 ?>
             </form>

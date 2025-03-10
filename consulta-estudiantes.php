@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: EstudiantesPanel.php?$queryString");
         exit();
     } else {
-        $_SESSION["error_message"] = "Número de cédula no encontrado";
+        $_SESSION["errorcedula_message"] = "Número de cédula no encontrado";
         header("Location: index.php");
         exit();
     }
