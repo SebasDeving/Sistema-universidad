@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Info - Pruebas Pro</title>
+    <link rel="icon" href="assets/img/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="assets/CSS/estilos-index.css">
     <script async src="assets/js/script-index.js"></script>
 </head>
