@@ -13,7 +13,7 @@ class CrudEstudiante
          die("Conexión fallida: " . Connection::getConnection()->connect_error);
       } else {
          // Utiliza la sintaxis correcta de mysqli para preparar y ejecutar la consulta
-         $select = $connection->prepare('SELECT * FROM estudiantes WHERE cedula_estudiante = ?');
+         $select = $connection->prepare('SELECT * FROM resultados_icfes WHERE cedula_estudiante = ?');
          $select->bind_param('s', $cedula);
          $select->execute();
          $result = $select->get_result();
@@ -21,7 +21,7 @@ class CrudEstudiante
          if ($result->num_rows > 0) {
             $estudiante = $result->fetch_assoc();
             // Asegúrate de que la clase Estudiante esté definida correctamente
-            $myEstudiante = new Estudiante($estudiante['id'], $estudiante['nombre'], $estudiante['apellido'], $estudiante['cedula_estudiante']);
+            $myEstudiante = new Estudiante($estudiante['nombre'], $estudiante['apellido'], $estudiante['cedula_estudiante']);
             return $myEstudiante;
          } else {
             return null;

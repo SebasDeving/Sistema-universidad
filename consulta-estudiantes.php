@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'cedula' => $result->getCedula(),
             'nombre' => $result->getNombre(),
             'apellido' => $result->getApellido(),
-            'id' => $result->getId()
+            
         ]);
         header("Location: EstudiantesPanel.php?$queryString");
         exit();
