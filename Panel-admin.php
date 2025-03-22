@@ -23,10 +23,10 @@ $conn->set_charset("utf8");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Admin - PruebasPro</title>
     <link rel="icon" href="assets/img/icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="assets/CSS/estilos-paneladmin.css?v32345">
+    <link rel="stylesheet" href="assets/CSS/estilos-paneladmin.css?v33445">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js?2131"></script>
-    <script src="assets/js/script-paneladmin.js?v=<?php echo time(); ?>"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/script-paneladmin.js?v32341"></script>
 </head>
 <body>
     <div class="container">
@@ -243,10 +243,6 @@ $conn->set_charset("utf8");
                             } else {
                                 echo "<tr><td colspan='5'>Error al obtener los datos: " . $conn->error . "</td></tr>";
                             }
-                            
-                            // Cerrar la conexión al final del archivo
-                        
-                         
                             ?>
                         </tbody>
                     </table>
@@ -295,16 +291,103 @@ $conn->set_charset("utf8");
                                 <div class="legend-color pulse" style="background-color: #FF5722;"></div>
                                 <div class="legend-text">Psicología</div>
                         </div>
-                       
                     </div>
-                    
                 </div>
             </div>
         </div>
         <!-- TENEMOS ACA LAS SECCION DE COMPARACION -->
         <div id="comparison" class="section">
-            <center><h1>ACA VA EL CONTENIDO DE LA SECCION DE COMPARACION</h1></center>
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">Comparación de Carreras</div>
+                    <div class="filter-controls">
+                        <select id="periodo-comparison">
+                            <option value="2024">2024</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="comparison-container">
+                    <div class="comparison-filters">
+                        <select id="carrera1-select" class="comparison-select">
+                            <option value="">Seleccionar primera carrera</option>
+                            <?php
+                            $query = "SELECT DISTINCT carrera FROM resultados_icfes ORDER BY carrera";
+                            $result = $conn->query($query);
+                            while($row = $result->fetch_assoc()) {
+                                echo "<option value='" . htmlspecialchars($row['carrera']) . "'>" . 
+                                     htmlspecialchars($row['carrera']) . "</option>";
+                            }
+                            ?>
+                        </select>
+                        
+                        <select id="carrera2-select" class="comparison-select">
+                            <option value="">Seleccionar segunda carrera</option>
+                            <?php
+                            $result->data_seek(0);
+                            while($row = $result->fetch_assoc()) {
+                                echo "<option value='" . htmlspecialchars($row['carrera']) . "'>" . 
+                                     htmlspecialchars($row['carrera']) . "</option>";
+                            }
+                            ?>
+                        </select>
+                        
+                        <button id="comparar-btn" onclick="compararCarreras()">Comparar</button>
+                    </div>
+
+                    <div class="comparison-results">
+                        <div class="comparison-card">
+                            <canvas id="comparacionPuntajes"></canvas>
+                        </div>
+                        
+                        <div class="comparison-stats">
+                            <div class="stat-comparison-card">
+                                <h3>
+                                    <i class="fas fa-chart-line"></i>
+                                    Promedio Global
+                                </h3>
+                                <div class="comparison-values">
+                                    <div id="promedio-carrera1" class="comparison-value" data-label="Primera Carrera">
+                                        <div class="value-label">Carrera 1</div>
+                                        <div class="value-number">--</div>
+                                    </div>
+                                    <div id="promedio-carrera2" class="comparison-value" data-label="Segunda Carrera">
+                                        <div class="value-label">Carrera 2</div>
+                                        <div class="value-number">--</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-comparison-card">
+                                <h3>
+                                    <i class="fas fa-users"></i>
+                                    Total Estudiantes
+                                </h3>
+                                <div class="comparison-values">
+                                    <div id="estudiantes-carrera1" class="comparison-value" data-label="Primera Carrera">
+                                        <div class="value-label">Carrera 1</div>
+                                        <div class="value-number">--</div>
+                                    </div>
+                                    <div id="estudiantes-carrera2" class="comparison-value" data-label="Segunda Carrera">
+                                        <div class="value-label">Carrera 2</div>
+                                        <div class="value-number">--</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</body>
+     </div>
+  </body>
 </html>
+
+<!-- Toast de notificación -->
+<div class="toast-container">
+    <div id="toast-notification" class="toast-notification">
+        <i class="fas fa-info-circle"></i>
+        <span id="toast-message"></span>
+    </div>
+</div>
+
