@@ -59,8 +59,8 @@ if ($cedula) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados de Prueba</title>
     <link rel="icon" href="assets/img/icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="assets/CSS/estilos-estudiantes.css?v223424333">
-    <script async src="assets/js/script-estudiante.js?2323"></script>
+    <link rel="stylesheet" href="assets/CSS/estilos-estudiantes.css?v23433">
+    <script async src="assets/js/script-estudiante.js?22343"></script>
 </head>
 
 <body>

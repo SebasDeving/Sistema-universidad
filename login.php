@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $stored_password)) {
             $_SESSION["admin"] = $cedula;
             $_SESSION["success_message"] = "Inicio de sesión exitoso";
-            echo "<script>setTimeout(function(){ window.location.href = 'panel-admin.html'; }, 2000);</script>";
+            echo "<script>setTimeout(function(){ window.location.href = 'panel-admin.php'; }, 2000);</script>";
             exit();
         } else {
             $_SESSION["error_message"] = "Contraseña incorrecta";
@@ -48,8 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$stmt->close();
-$update_stmt->close();
+// Cerrar la sentencia preparada SOLO si existe
+if (isset($stmt) && $stmt !== null) {
+    $stmt->close();
+}
 
+// Cerrar la conexión
 $conn->close();
 ?>

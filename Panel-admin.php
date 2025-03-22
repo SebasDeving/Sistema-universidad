@@ -1,4 +1,21 @@
+<?php
+// Agregar al principio del archivo, antes del HTML
+$servername = "localhost";
+$username = "root";  // Tu usuario de MySQL
+$password = "";      // Tu contraseña de MySQL
+$dbname = "pruebas_pro";  // El nombre de tu base de datos
 
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+// Establecer charset a utf8
+$conn->set_charset("utf8");
+?>
 
 <html lang="es">
 <head>
@@ -6,9 +23,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Admin - PruebasPro</title>
     <link rel="icon" href="assets/img/icon.png" type="image/x-icon">
-    <link rel="stylesheet" href="assets/CSS/estilos-paneladmin.css?v3323234">
+    <link rel="stylesheet" href="assets/CSS/estilos-paneladmin.css?v32345">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script async src="assets/js/script-paneladmin.js?v32332"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js?2131"></script>
+    <script src="assets/js/script-paneladmin.js?v=<?php echo time(); ?>"></script>
 </head>
 <body>
     <div class="container">
@@ -37,20 +55,24 @@
                 </li>
                 <li onclick="showSection('comparison')">
                     <span class="menu-item-icon">
-                        <i class="fas fa-chart-bar"></i>
+                        <i class="fas fa-chart-line"></i>
                     </span>
                     <span class="menu-text">Comparación</span>
                 </li>
+               
+                
             </ul>
         </div>
         
         <div class="content">
             <div class="header">
+                
                 <h2>Panel de Administrador</h2>
                 <div class="user-info">
                     <span class="user-name">Administrador</span>
                     <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
                 </div>
+                
             </div>
             
             <!-- Dashboard Section -->
@@ -61,6 +83,7 @@
                         <div class="filter-controls">       
                         </div>
                     </div>
+                    
                     
                     <div class="stats-container">
                         <div class="stat-card animate-card">
@@ -174,8 +197,6 @@
                         <div class="filter-controls">
                             <select id="year-filter">
                                 <option value="2024">2024</option>
-                                <option value="2023">2023</option>
-                                <option value="2022">2022</option>
                             </select>
                         </div>
                     </div>
@@ -185,274 +206,105 @@
                             <tr>
                                 <th>Carrera</th>
                                 <th>Estudiantes</th>
-                                <th>Prom. General</th>
-                                <th>Prom. Matemáticas</th>
-                                <th>Prom. Lenguaje</th>
+                                <th>Puntaje Global</th>
+                                <th>Percentil Global</th>
                                 <th>Tendencia</th>
-                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Ing. de Sistemas</td>
-                                <td>458</td>
-                                <td>74.8</td>
-                                <td>77.2</td>
-                                <td>72.5</td>
-                                <td><span class="trend-up">↑ 2.1%</span></td>
-                                <td><button class="action-btn">Analizar</button></td>
-                            </tr>
-                            <tr>
-                                <td>Ing. de Datos</td>
-                                <td>325</td>
-                                <td>83.7</td>
-                                <td>86.4</td>
-                                <td>81.2</td>
-                                <td><span class="trend-up">↑ 3.5%</span></td>
-                                <td><button class="action-btn">Analizar</button></td>
-                            </tr>
-                            <tr>
-                                <td>Ing. de Software</td>
-                                <td>287</td>
-                                <td>76.2</td>
-                                <td>74.8</td>
-                                <td>77.6</td>
-                                <td><span class="trend-up">↑ 1.8%</span></td>
-                                <td><button class="action-btn">Analizar</button></td>
-                            </tr>
-                            <tr>
-                                <td>Ing. en Redes</td>
-                                <td>175</td>
-                                <td>70.5</td>
-                                <td>73.1</td>
-                                <td>68.2</td>
-                                <td><span class="trend-down">↓ 0.8%</span></td>
-                                <td><button class="action-btn">Analizar</button></td>
-                            </tr>
-                            <tr>
-                                <td>Ing. en IA</td>
-                                <td>112</td>
-                                <td>81.3</td>
-                                <td>84.7</td>
-                                <td>78.2</td>
-                                <td><span class="trend-up">↑ 4.2%</span></td>
-                                <td><button class="action-btn">Analizar</button></td>
-                            </tr>
-                            <tr>
-                                <td>Ing. en Ciberseguridad</td>
-                                <td>98</td>
-                                <td>72.8</td>
-                                <td>75.3</td>
-                                <td>70.4</td>
-                                <td><span class="trend-up">↑ 1.4%</span></td>
-                                <td><button class="action-btn">Analizar</button></td>
-                            </tr>
+                            <?php
+                            // Consulta para obtener estadísticas por carrera
+                            $query = "SELECT 
+                                carrera,
+                                COUNT(*) as total_estudiantes,
+                                AVG(punt_global) as promedio_puntaje,
+                                NTILE(100) OVER (ORDER BY punt_global) as percentil
+                            FROM resultados_icfes
+                            GROUP BY carrera
+                            ORDER BY promedio_puntaje DESC";
+                            
+                            $result = $conn->query($query);
+                            
+                            if ($result) {
+                                while($row = $result->fetch_assoc()) {
+                                    // Simulamos diferentes tendencias basadas en el puntaje promedio
+                                    $tendencia = rand(-5, 8); // Generamos un número aleatorio entre -5 y 8
+                                    $clase_tendencia = $tendencia >= 0 ? 'trend-up' : 'trend-down';
+                                    $flecha = $tendencia >= 0 ? '↑' : '↓';
+                                    
+                                    echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($row['carrera']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['total_estudiantes']) . "</td>";
+                                    echo "<td>" . number_format($row['promedio_puntaje'], 1) . "</td>";
+                                    echo "<td>" . number_format($row['percentil'], 1) . "</td>";
+                                    echo "<td><span class='" . $clase_tendencia . "'>" . $flecha . " " . abs($tendencia) . "%</span></td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='5'>Error al obtener los datos: " . $conn->error . "</td></tr>";
+                            }
+                            
+                            // Cerrar la conexión al final del archivo
+                        
+                         
+                            ?>
                         </tbody>
                     </table>
-                    
-                    <div class="chart-container">
+                    <div class="chart-container" style="padding-bottom: 132px;">
                         <div class="panel-title">Distribución de Puntajes por Carrera</div>
-                        <div class="chart-bars">
+                        <div class="chart-bars animated">
                             <div class="bar" style="height: 65%; background-color: #4CAF50;">
-                                <div class="bar-label">Sistemas</div>
+                                <div class="bar-value">65%</div>
+                                <div class="bar-label">Ing. Sistemas</div>
                             </div>
                             <div class="bar" style="height: 85%; background-color: #2196F3;">
-                                <div class="bar-label">Datos</div>
+                                <div class="bar-value">85%</div>
+                                <div class="bar-label">Ing. Industrial</div>
                             </div>
                             <div class="bar" style="height: 72%; background-color: #FFC107;">
-                                <div class="bar-label">Software</div>
+                                <div class="bar-value">72%</div>
+                                <div class="bar-label">Adm. Empresas</div>
                             </div>
                             <div class="bar" style="height: 58%; background-color: #9C27B0;">
-                                <div class="bar-label">Redes</div>
+                                <div class="bar-value">58%</div>
+                                <div class="bar-label">Diseño Gráfico</div>
                             </div>
                             <div class="bar" style="height: 77%; background-color: #FF5722;">
-                                <div class="bar-label">IA</div>
-                            </div>
-                            <div class="bar" style="height: 62%; background-color: #607D8B;">
-                                <div class="bar-label">Ciberseguridad</div>
+                                <div class="bar-value">77%</div>
+                                <div class="bar-label">Psicología</div>
                             </div>
                         </div>
-                        <div class="chart-legend">
+                        <div class="chart-legend animated">
                             <div class="legend-item">
-                                <div class="legend-color" style="background-color: #4CAF50;"></div>
-                                <div>Matemáticas</div>
+                                <div class="legend-color pulse" style="background-color: #4CAF50;"></div>
+                                <div class="legend-text">Ing. Sistemas</div>
                             </div>
                             <div class="legend-item">
-                                <div class="legend-color" style="background-color: #2196F3;"></div>
-                                <div>Lenguaje</div>
+                                <div class="legend-color pulse" style="background-color: #2196F3;"></div>
+                                <div class="legend-text">Ing. Industrial</div>
                             </div>
                             <div class="legend-item">
-                                <div class="legend-color" style="background-color: #FFC107;"></div>
-                                <div>Lógica</div>
+                                <div class="legend-color pulse" style="background-color: #FFC107;"></div>
+                                    <div class="legend-text">Adm. Empresas</div>
                             </div>
+                            <div class="legend-item">
+                                <div class="legend-color pulse" style="background-color: #9C27B0;"></div>
+                                <div class="legend-text">Diseño Gráfico</div>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color pulse" style="background-color: #FF5722;"></div>
+                                <div class="legend-text">Psicología</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Comparison Section -->
-            <div id="comparison" class="section">
-                <div class="panel">
-                    <div class="panel-header">
-                        <div class="panel-title">Comparación Avanzada</div>
+                       
                     </div>
                     
-                    <div class="comparison-controls">
-                        <div class="comparison-group">
-                            <div class="comparison-title">Grupo 1</div>
-                            <select class="form-control">
-                                <option value="sistemas">Ing. de Sistemas</option>
-                                <option value="datos">Ing. de Datos</option>
-                                <option value="software">Ing. de Software</option>
-                                <option value="redes">Ing. en Redes</option>
-                                <option value="ia">Ing. en IA</option>
-                                <option value="ciber">Ing. en Ciberseguridad</option>
-                            </select>
-                        </div>
-                        <div class="comparison-group">
-                            <div class="comparison-title">Grupo 2</div>
-                            <select class="form-control">
-                                <option value="datos">Ing. de Datos</option>
-                                <option value="sistemas">Ing. de Sistemas</option>
-                                <option value="software">Ing. de Software</option>
-                                <option value="redes">Ing. en Redes</option>
-                                <option value="ia">Ing. en IA</option>
-                                <option value="ciber">Ing. en Ciberseguridad</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="comparison-chart">
-                        <div class="panel-title">Comparación de Rendimiento</div>
-                        <div style="display: flex; justify-content: space-around; margin-top: 20px;">
-                            <div style="text-align: center;">
-                                <h3>Ing. de Sistemas</h3>
-                                <div class="stat-value">74.8</div>
-                                <div>Promedio General</div>
-                            </div>
-                            <div style="text-align: center;">
-                                <h3>Ing. de Datos</h3>
-                                <div class="stat-value">83.7</div>
-                                <div>Promedio General</div>
-                            </div>
-                        </div>
-                        
-                        <div style="margin-top: 40px; display: flex; justify-content: space-around;">
-                            <div style="width: 45%;">
-                                <div style="height: 20px; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
-                                    <div style="height: 100%; width: 77%; background-color: #4CAF50;"></div>
-                                </div>
-                                <div>Matemáticas: 77.2%</div>
-                                
-                                <div style="height: 20px; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 15px 0 10px 0;">
-                                    <div style="height: 100%; width: 73%; background-color: #4CAF50;"></div>
-                                </div>
-                                <div>Lenguaje: 72.5%</div>
-                                
-                                <div style="height: 20px; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 15px 0 10px 0;">
-                                    <div style="height: 100%; width: 75%; background-color: #4CAF50;"></div>
-                                </div>
-                                <div>Lógica: 74.8%</div>
-                            </div>
-                            
-                            <div style="width: 45%;">
-                                <div style="height: 20px; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin-bottom: 10px;">
-                                    <div style="height: 100%; width: 86%; background-color: #2196F3;"></div>
-                                </div>
-                                <div>Matemáticas: 86.4%</div>
-                                
-                                <div style="height: 20px; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 15px 0 10px 0;">
-                                    <div style="height: 100%; width: 81%; background-color: #2196F3;"></div>
-                                </div>
-                                <div>Lenguaje: 81.2%</div>
-                                
-                                <div style="height: 20px; background-color: #e0e0e0; border-radius: 10px; overflow: hidden; margin: 15px 0 10px 0;">
-                                    <div style="height: 100%; width: 84%; background-color: #2196F3;"></div>
-                                </div>
-                                <div>Lógica: 83.5%</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="comparison-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Métrica</th>
-                                    <th>Ing. de Sistemas</th>
-                                    <th>Ing. de Datos</th>
-                                    <th>Diferencia</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Promedio General</td>
-                                    <td>74.8</td>
-                                    <td>83.7</td>
-                                    <td><span class="trend-up">+8.9</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Matemáticas</td>
-                                    <td>77.2</td>
-                                    <td>86.4</td>
-                                    <td><span class="trend-up">+9.2</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Lenguaje</td>
-                                    <td>72.5</td>
-                                    <td>81.2</td>
-                                    <td><span class="trend-up">+8.7</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Lógica</td>
-                                    <td>74.8</td>
-                                    <td>83.5</td>
-                                    <td><span class="trend-up">+8.7</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Análisis de Datos</td>
-                                    <td>71.3</td>
-                                    <td>89.2</td>
-                                    <td><span class="trend-up">+17.9</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Programación</td>
-                                    <td>78.6</td>
-                                    <td>82.1</td>
-                                    <td><span class="trend-up">+3.5</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Settings Section -->
-            <div id="settings" class="section">
-                <div class="panel">
-                    <div class="panel-header">
-                        <div class="panel-title">Configuración del Sistema</div>
-                    </div>
-                    
-                    <div class="settings-grid">
-                        <div class="settings-card">
-                            <div class="settings-title">Notificaciones</div>
-                            <div class="form-group">
-                                <label>Activar Notificaciones:</label>
-                                <input type="checkbox" id="notifications-toggle">
-                            </div>
-                            <div class="form-group">
-                                <label for="notification-email">Email para Notificaciones:</label>
-                                <input type="email" id="notification-email" placeholder="ejemplo@dominio.com">
-                            </div>
-                            <button class="settings-btn">Guardar Configuración de Notificaciones</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
+        <!-- TENEMOS ACA LAS SECCION DE COMPARACION -->
+        <div id="comparison" class="section">
+            <center><h1>ACA VA EL CONTENIDO DE LA SECCION DE COMPARACION</h1></center>
+        </div>
     </div>
-
-   
 </body>
 </html>
