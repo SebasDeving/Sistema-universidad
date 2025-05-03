@@ -177,6 +177,156 @@ function initializeComparisonChart() {
     }
 }
 
+// Función para actualizar el gráfico de comparación
+function actualizarGraficoComparacion(data) {
+    const ctx = document.getElementById('comparacionPuntajes');
+    if (!ctx) {
+        console.error('Elemento del gráfico de comparación no encontrado');
+        return;
+    }
+
+    try {
+        if (comparacionChart instanceof Chart) {
+            comparacionChart.destroy();
+        }
+
+        comparacionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Lectura Crítica', 'Matemáticas', 'Ciencias', 'Sociales', 'Inglés'],
+                datasets: [
+                    {
+                        label: data.carrera1.nombre,
+                        data: data.carrera1.puntajes,
+                        backgroundColor: 'rgba(76, 175, 80, 0.7)',
+                        borderColor: '#4CAF50',
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        hoverBackgroundColor: 'rgba(76, 175, 80, 0.9)'
+                    },
+                    {
+                        label: data.carrera2.nombre,
+                        data: data.carrera2.puntajes,
+                        backgroundColor: 'rgba(33, 150, 243, 0.7)',
+                        borderColor: '#2196F3',
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        hoverBackgroundColor: 'rgba(33, 150, 243, 0.9)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                animation: {
+                    duration: 1000,
+                    easing: 'easeInOutQuart'
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 13
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Comparación de Puntajes por Área',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: 20
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error al actualizar el gráfico de comparación:', error);
+        mostrarToast('Error al actualizar el gráfico de comparación', 3000);
+    }
+}
+
+// Función para actualizar estadísticas con animación
+function actualizarEstadisticas(data) {
+    const elementos = [
+        {
+            id: 'promedio-carrera1',
+            valor: data.carrera1.promedio_global,
+            nombre: data.carrera1.nombre,
+            esPromedio: true
+        },
+        {
+            id: 'promedio-carrera2',
+            valor: data.carrera2.promedio_global,
+            nombre: data.carrera2.nombre,
+            esPromedio: true
+        },
+        {
+            id: 'estudiantes-carrera1',
+            valor: data.carrera1.total_estudiantes,
+            nombre: data.carrera1.nombre,
+            esPromedio: false
+        },
+        {
+            id: 'estudiantes-carrera2',
+            valor: data.carrera2.total_estudiantes,
+            nombre: data.carrera2.nombre,
+            esPromedio: false
+        }
+    ];
+
+    elementos.forEach(({id, valor, nombre, esPromedio}) => {
+        const elemento = document.getElementById(id);
+        if (!elemento) {
+            console.error(`Elemento ${id} no encontrado`);
+            return;
+        }
+
+        elemento.classList.add('loading');
+        
+        setTimeout(() => {
+            elemento.innerHTML = `
+                <div class="value-label">${nombre}</div>
+                <div class="value-number">${formatearNumero(valor)}${esPromedio ? '%' : ''}</div>
+            `;
+            elemento.classList.remove('loading');
+            elemento.classList.add('updated');
+            
+            setTimeout(() => {
+                elemento.classList.remove('updated');
+            }, 500);
+        }, 300);
+    });
+}
+
 // Gestión de comparación
 function compararCarreras() {
     const carrera1 = document.getElementById('carrera1-select')?.value;
