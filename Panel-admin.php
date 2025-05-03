@@ -26,7 +26,7 @@ $conn->set_charset("utf8");
     <link rel="stylesheet" href="assets/CSS/estilos-paneladmin.css?v33445">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="assets/js/script-paneladmin.js?v32341"></script>
+    <script src="assets/js/script-paneladmin.js?v33241"></script>
 </head>
 <body>
     <div class="container">

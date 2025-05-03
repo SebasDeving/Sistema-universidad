@@ -45,6 +45,9 @@ function cargarResultados(pagina, carrera = 'all', cedula = '') {
     const spanPaginaActual = document.getElementById('pagina-actual');
     const spanTotalPaginas = document.getElementById('total-paginas');
 
+    // Asegurar que pagina sea un número válido
+    pagina = parseInt(pagina) || 1;
+    
     // Incluir cédula en la URL si existe
     let url = `obtener_resultados.php?pagina=${pagina}&carrera=${carrera}&registros_por_pagina=${registrosPorPagina}`;
     if (cedula) {
@@ -69,6 +72,7 @@ function cargarResultados(pagina, carrera = 'all', cedula = '') {
             });
 
             // Actualizar paginación
+            paginaActual = pagina; // Asegurar que paginaActual sea el valor correcto
             spanPaginaActual.textContent = pagina;
             spanTotalPaginas.textContent = data.total_paginas;
             btnAnterior.disabled = pagina <= 1;
@@ -77,45 +81,58 @@ function cargarResultados(pagina, carrera = 'all', cedula = '') {
         .catch(error => console.error('Error:', error));
 }
 
-// Event listeners cuando el documento esté listo
+// Event listeners cuando el documento esté listo - SOLO ESTE BLOQUE DE PAGINACIÓN
 document.addEventListener('DOMContentLoaded', () => {
+    // Remover todas las definiciones duplicadas y sólo usar esta
     const btnAnterior = document.getElementById('anterior');
     const btnSiguiente = document.getElementById('siguiente');
     const careerFilter = document.getElementById('career-filter');
     const studentSearch = document.getElementById('student-search');
+    
+    // Limpiar event listeners existentes (para evitar duplicados)
+    if (btnAnterior) {
+        const nuevoAnterior = btnAnterior.cloneNode(true);
+        btnAnterior.parentNode.replaceChild(nuevoAnterior, btnAnterior);
+        
+        // Añadir nuevo listener
+        nuevoAnterior.addEventListener('click', () => {
+            if (paginaActual > 1) {
+                cargarResultados(paginaActual - 1, carreraSeleccionada, studentSearch?.value?.trim() || '');
+            }
+        });
+    }
+    
+    if (btnSiguiente) {
+        const nuevoSiguiente = btnSiguiente.cloneNode(true);
+        btnSiguiente.parentNode.replaceChild(nuevoSiguiente, btnSiguiente);
+        
+        // Añadir nuevo listener
+        nuevoSiguiente.addEventListener('click', () => {
+            cargarResultados(paginaActual + 1, carreraSeleccionada, studentSearch?.value?.trim() || '');
+        });
+    }
 
     // Event listener para la búsqueda por cédula
-    let timeoutId;
-    studentSearch.addEventListener('input', function() {
-        clearTimeout(timeoutId);
-        const cedula = this.value.trim();
-        
-        // Esperar 500ms después de que el usuario deje de escribir
-        timeoutId = setTimeout(() => {
-            paginaActual = 1; // Resetear a la primera página
-            cargarResultados(paginaActual, carreraSeleccionada, cedula);
-        }, 500);
-    });
+    if (studentSearch) {
+        let timeoutId;
+        studentSearch.addEventListener('input', function() {
+            clearTimeout(timeoutId);
+            const cedula = this.value.trim();
+            
+            // Esperar 500ms después de que el usuario deje de escribir
+            timeoutId = setTimeout(() => {
+                cargarResultados(1, carreraSeleccionada, cedula);
+            }, 500);
+        });
+    }
 
     // Event listener para el filtro de carreras
-    careerFilter.addEventListener('change', function() {
-        carreraSeleccionada = this.value;
-        paginaActual = 1;
-        cargarResultados(paginaActual, carreraSeleccionada, studentSearch.value.trim());
-    });
-
-    // Event listeners para la paginación
-    btnAnterior.addEventListener('click', () => {
-        if (paginaActual > 1) {
-            paginaActual--;
-            cargarResultados(paginaActual, carreraSeleccionada, studentSearch.value.trim());
-        }
-    });
-
-    btnSiguiente.addEventListener('click', () => {
-        paginaActual++;
-        cargarResultados(paginaActual, carreraSeleccionada, studentSearch.value.trim());
-    });
+    if (careerFilter) {
+        careerFilter.addEventListener('change', function() {
+            carreraSeleccionada = this.value;
+            cargarResultados(1, carreraSeleccionada, studentSearch?.value?.trim() || '');
+        });
+    }
 
     // Cargar datos iniciales
     cargarResultados(1, 'all', '');
@@ -158,25 +175,57 @@ document.addEventListener('DOMContentLoaded', inicializarTabla);
 
 // Event listeners para los botones de paginación
 document.addEventListener('DOMContentLoaded', function() {
+    const btnAnterior = document.getElementById('anterior');
+    const btnSiguiente = document.getElementById('siguiente');
     let paginaActual = 1;
 
-    document.getElementById('anterior').addEventListener('click', () => {
-        if (paginaActual > 1) {
-            paginaActual--;
-            cargarResultados(paginaActual);
-        }
-    });
+    // Verificar si los elementos existen antes de añadir listeners
+    if (btnAnterior) {
+        btnAnterior.addEventListener('click', () => {
+            if (paginaActual > 1) {
+                paginaActual--;
+                cargarResultados(paginaActual);
+            }
+        });
+    }
 
-    document.getElementById('siguiente').addEventListener('click', () => {
-        paginaActual++;
-        cargarResultados(paginaActual);
-    });
+    if (btnSiguiente) {
+        btnSiguiente.addEventListener('click', () => {
+            paginaActual++;
+            cargarResultados(paginaActual);
+        });
+    }
 
     // Cargar la primera página al iniciar
     cargarResultados(1);
 });
 
-// Ejecutar cuando el documento esté listo
+// Reemplazar línea 207 y siguientes
+// Envolver en IIFE para no contaminar el alcance global
+(function() {
+    const anteriorBtn = document.getElementById('anterior');
+    const siguienteBtn = document.getElementById('siguiente');
+
+    if (anteriorBtn) {
+        anteriorBtn.addEventListener('click', () => {
+            if (paginaActual > 1) {
+                paginaActual--;
+                cargarResultados(paginaActual);
+            }
+        });
+    }
+
+    if (siguienteBtn) {
+        siguienteBtn.addEventListener('click', () => {
+            if (paginaActual < totalPaginas) {
+                paginaActual++;
+                cargarResultados(paginaActual);
+            }
+        });
+    }
+})();
+
+// CARGAR ESTADISTICAS INICIALES
 document.addEventListener('DOMContentLoaded', function() {
     // Cargar la primera página al iniciar
     cargarResultados(1);
@@ -203,23 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cargar la primera página al iniciar
     cargarResultados(1);
 });
-
-document.getElementById('anterior').addEventListener('click', () => {
-    if (paginaActual > 1) {
-        paginaActual--;
-        cargarResultados(paginaActual);
-    }
-});
-
-document.getElementById('siguiente').addEventListener('click', () => {
-    if (paginaActual < totalPaginas) {
-        paginaActual++;
-        cargarResultados(paginaActual);
-    }
-});
-
-// Cargar la primera página al iniciar
-cargarResultados(1);
 
 // CARRERAS LA LOGICA 
 // Función para cargar estadísticas por carrera
