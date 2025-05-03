@@ -6,8 +6,8 @@
     <title>Sistema de Info - Pruebas Pro</title>
     <link rel="icon" href="assets/img/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="assets/CSS/estilos-index.css?v=33245">
-    <script async src="assets/js/script-index.js?v=33245"></script>
+    <link rel="stylesheet" href="assets/CSS/estilos-index.css?v=36735">
+    <script async src="assets/js/script-index.js?v=3675"></script>
 </head>
 <body>
     <div class="container animate__animated animate__fadeIn" style="margin-left: 4em;">

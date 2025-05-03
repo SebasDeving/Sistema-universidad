@@ -36,7 +36,7 @@ function showSection(sectionId) {
 
 // Gestión de sesión
 function logout() {
-    window.location.href = 'logout.php';
+    window.location.href = 'index.php';
 }
 
 // Gestión de resultados y paginación
